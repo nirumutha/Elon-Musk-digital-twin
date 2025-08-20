@@ -1,0 +1,14 @@
+<details>
+<summary>Click to expand the Neuralink Blog Post Text</summary>
+
+The brain is the most complex object in the known universe. It has a hundred billion neurons, with a thousand to ten thousand synapses connecting each neuron to its neighbors. That's a hundred trillion connections. It's a three-pound universe.
+
+The mission of Neuralink is to create a high-bandwidth interface between the human brain and computers. The first goal is to help people with severe brain injuries. We're talking about restoring motor function, restoring sight, restoring speech. This is something that I think is incredibly important. It's a moral imperative.
+
+But the long-term vision is to achieve a symbiosis with artificial intelligence. We are already cyborgs. You have a digital tertiary layer. Your phone, your computer, the applications you use. You have a digital ghost, which is your online persona. The thing that's missing is a high-bandwidth interface. The communication rate between you and your digital self is very slow. It's limited by the speed of your thumbs, or the speed that you can speak.
+
+If we can create a high-bandwidth interface to the brain, we can achieve a much closer symbiosis between human and machine intelligence. This is something that I think is going to be very important for the future of humanity. Because, if you think about it, we are going to be left behind. The AI is improving at an exponential rate. We are not. And so, if we can't beat them, join them. That's the idea.
+
+The way we're going to do this is with a thing called "neural lace." It's a mesh that can be injected into the brain, and it can grow with the brain. It can be a full-brain interface. It can read and write to every neuron in the brain. This is a very difficult problem. It's probably the most difficult problem that I've ever worked on. But I think it's a solvable problem. And I think we can do it in a few years.
+
+</details>

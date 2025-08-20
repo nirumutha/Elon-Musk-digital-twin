@@ -1,0 +1,4 @@
+.env
+venv/
+musk_db/
+__pycache__/
