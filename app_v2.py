@@ -32,7 +32,7 @@ try:
         with st.chat_message(message["role"]):
             st.markdown(message["content"])
             if "audio" in message and message["audio"]:
-                # Decode the base64 string back to bytes for playback
+                # THE FIX: Decode the base64 string and wrap it in BytesIO
                 audio_bytes = base64.b64decode(message["audio"])
                 st.audio(io.BytesIO(audio_bytes), format="audio/mp3")
             if "sources" in message and message["sources"]:
@@ -55,7 +55,7 @@ try:
                 st.markdown(answer)
                 
                 if audio:
-                    # Decode the base64 string back to bytes for playback
+                    # THE FIX: Decode the base64 string and wrap it in BytesIO
                     audio_bytes = base64.b64decode(audio)
                     st.audio(io.BytesIO(audio_bytes), format="audio/mp3")
                 
