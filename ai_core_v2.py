@@ -10,7 +10,6 @@ from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain.schema.runnable import RunnablePassthrough
 from langchain.schema.output_parser import StrOutputParser
 import nltk
-import base64
 
 # --- Tell NLTK where to find the data ---
 nltk.data.path.append(os.path.expanduser('~/nltk_data'))
@@ -95,22 +94,21 @@ class MuskTwinV2:
         
         self.retriever = retriever
         
-    def generate_audio_base64(self, text: str) -> str:
-        """Generates audio and returns it as a base64 encoded string."""
+    def generate_audio(self, text: str) -> bytes:
+        """Generates audio from text using OpenAI's TTS API."""
         try:
             response = self.client.audio.speech.create(
                 model="tts-1",
                 voice="onyx",
                 input=text
             )
-            audio_base64 = base64.b64encode(response.content).decode('utf-8')
-            return audio_base64
+            return response.content
         except Exception as e:
             print(f"🔴 Error generating audio: {e}")
             return None
 
     def ask(self, question: str, chat_history: list = None) -> dict:
-        """Asks a question and returns the answer with base64 audio."""
+        """Asks a question to the digital twin and generates audio for the answer."""
         if not question:
             return {"answer": "Please ask a question.", "sources": [], "context_chunks": [], "audio": None}
 
@@ -120,7 +118,7 @@ class MuskTwinV2:
         
         answer = self.chain.invoke(question)
         
-        audio_content = self.generate_audio_base64(answer)
+        audio_content = self.generate_audio(answer)
         
         return {"answer": answer, "sources": sources, "context_chunks": context_chunks, "audio": audio_content}
 

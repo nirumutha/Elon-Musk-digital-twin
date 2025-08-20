@@ -1,7 +1,12 @@
+# --- FIX for Streamlit Deployment ---
+__import__('pysqlite3')
+import sys
+sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
+# --- END OF FIX ---
+
 import streamlit as st
 from ai_core_v2 import MuskTwinV2
 import io
-import base64
 
 # --- Page Configuration ---
 st.set_page_config(
@@ -31,10 +36,9 @@ try:
     for message in st.session_state.messages:
         with st.chat_message(message["role"]):
             st.markdown(message["content"])
+            # Using the standard st.audio component which does not autoplay
             if "audio" in message and message["audio"]:
-                # THE FIX: Decode the base64 string and wrap it in BytesIO
-                audio_bytes = base64.b64decode(message["audio"])
-                st.audio(io.BytesIO(audio_bytes), format="audio/mp3")
+                st.audio(io.BytesIO(message["audio"]), format="audio/mp3")
             if "sources" in message and message["sources"]:
                 st.info(f"Sources: {', '.join(message['sources'])}")
 
@@ -54,10 +58,9 @@ try:
                 
                 st.markdown(answer)
                 
+                # Using the standard st.audio component which does not autoplay
                 if audio:
-                    # THE FIX: Decode the base64 string and wrap it in BytesIO
-                    audio_bytes = base64.b64decode(audio)
-                    st.audio(io.BytesIO(audio_bytes), format="audio/mp3")
+                    st.audio(io.BytesIO(audio), format="audio/mp3")
                 
                 if sources:
                     st.info(f"Sources: {', '.join(sources)}")
