@@ -1,9 +1,10 @@
 import os
+import re
 from dotenv import load_dotenv
 from openai import OpenAI
 from langchain_openai import ChatOpenAI, OpenAIEmbeddings
 from langchain.prompts import ChatPromptTemplate
-from langchain_community.vectorstores import Chroma
+from langchain_community.vectorstores import FAISS # <-- UPGRADE: Using FAISS instead of Chroma
 from langchain_community.document_loaders import TextLoader
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain.schema.runnable import RunnablePassthrough
@@ -17,30 +18,31 @@ nltk.data.path.append(os.path.expanduser('~/nltk_data'))
 # --- Initial Setup ---
 load_dotenv()
 CORPUS_DIR = "./corpus/"
-DB_DIR = "./musk_db/"
+DB_DIR = "./musk_db_faiss/" # <-- New directory for the FAISS index
 
 class MuskTwinV2:
-    """A sophisticated AI Digital Twin of Elon Musk using ChromaDB and a RAG pipeline."""
+    """A sophisticated AI Digital Twin of Elon Musk using FAISS and a RAG pipeline."""
     
     def __init__(self):
-        """Initializes the RAG pipeline, building the ChromaDB store if it doesn't exist."""
-        print("🧠 Initializing AI Core with ChromaDB...")
+        """Initializes the RAG pipeline, building the FAISS index if it doesn't exist."""
+        print("🧠 Initializing AI Core with FAISS...")
         self.client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
         self.embeddings = OpenAIEmbeddings(model="text-embedding-3-small")
         
+        # Check if the FAISS index needs to be created
         if not os.path.exists(DB_DIR):
-            print("   No existing ChromaDB store found. Building a new one from the corpus...")
+            print("   No existing FAISS index found. Building a new one from the corpus...")
             self._create_and_persist_db()
         
-        print("   Loading ChromaDB store...")
-        self.db = Chroma(persist_directory=DB_DIR, embedding_function=self.embeddings)
-        print("   ChromaDB store loaded successfully.")
+        print("   Loading FAISS index...")
+        self.db = FAISS.load_local(DB_DIR, self.embeddings, allow_dangerous_deserialization=True)
+        print("   FAISS index loaded successfully.")
         
         self._setup_rag_chain()
         print("✅ AI Core initialized successfully.")
 
     def _create_and_persist_db(self):
-        """Loads data, splits it, and creates the Chroma vector store."""
+        """Loads data, splits it, and creates the FAISS vector store."""
         all_documents = []
         file_paths = [os.path.join(CORPUS_DIR, f) for f in os.listdir(CORPUS_DIR) if f.endswith('.txt')]
         
@@ -57,14 +59,13 @@ class MuskTwinV2:
         splits = text_splitter.split_documents(all_documents)
         
         print(f"   Splitting documents into {len(splits)} chunks.")
-        print("   Creating and persisting ChromaDB store... This may take a few moments.")
+        print("   Creating FAISS index... This may take a few moments.")
         
-        Chroma.from_documents(
-            documents=splits, 
-            embedding=self.embeddings, 
-            persist_directory=DB_DIR
-        )
-        print("   ✅ ChromaDB store created and persisted.")
+        # Create the FAISS index from the documents
+        db = FAISS.from_documents(splits, self.embeddings)
+        # Save the index to disk
+        db.save_local(DB_DIR)
+        print("   ✅ FAISS index created and persisted.")
 
     def _setup_rag_chain(self):
         """Defines and sets up the LangChain RAG pipeline."""
@@ -127,6 +128,6 @@ class MuskTwinV2:
         return {"answer": answer, "sources": sources, "context_chunks": context_chunks, "audio": audio_content}
 
 if __name__ == "__main__":
-    print("--- Running AI Core Setup with ChromaDB ---")
+    print("--- Running AI Core Setup with FAISS ---")
     twin = MuskTwinV2()
     print("\n--- AI Core Setup Complete ---")
