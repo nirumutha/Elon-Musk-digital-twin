@@ -1,9 +1,3 @@
-# --- FIX for Streamlit Deployment ---
-__import__('pysqlite3')
-import sys
-sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
-# --- END OF FIX ---
-
 import streamlit as st
 from ai_core_v2 import MuskTwinV2
 import io
@@ -36,8 +30,8 @@ try:
     for message in st.session_state.messages:
         with st.chat_message(message["role"]):
             st.markdown(message["content"])
-            # Using the standard st.audio component which does not autoplay
             if "audio" in message and message["audio"]:
+                # Using the standard st.audio component with the BytesIO wrapper for mobile
                 st.audio(io.BytesIO(message["audio"]), format="audio/mp3")
             if "sources" in message and message["sources"]:
                 st.info(f"Sources: {', '.join(message['sources'])}")
@@ -58,8 +52,8 @@ try:
                 
                 st.markdown(answer)
                 
-                # Using the standard st.audio component which does not autoplay
                 if audio:
+                    # Using the standard st.audio component with the BytesIO wrapper for mobile
                     st.audio(io.BytesIO(audio), format="audio/mp3")
                 
                 if sources:

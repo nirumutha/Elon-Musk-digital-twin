@@ -5,12 +5,10 @@ yt-dlp
 trafilatura
 requests
 beautifulsoup4
-pydub
 langchain
 langchain-openai
 langchain-community
+chromadb
 tiktoken
 unstructured
 nltk
-faiss-cpu
-langchain-chroma
