@@ -4,7 +4,7 @@ from dotenv import load_dotenv
 from openai import OpenAI
 from langchain_openai import ChatOpenAI, OpenAIEmbeddings
 from langchain.prompts import ChatPromptTemplate
-from langchain_community.vectorstores import FAISS # <-- UPGRADE: Using FAISS instead of Chroma
+from langchain_community.vectorstores import FAISS
 from langchain_community.document_loaders import TextLoader
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain.schema.runnable import RunnablePassthrough
@@ -18,7 +18,7 @@ nltk.data.path.append(os.path.expanduser('~/nltk_data'))
 # --- Initial Setup ---
 load_dotenv()
 CORPUS_DIR = "./corpus/"
-DB_DIR = "./musk_db_faiss/" # <-- New directory for the FAISS index
+DB_DIR = "./musk_db_faiss/"
 
 class MuskTwinV2:
     """A sophisticated AI Digital Twin of Elon Musk using FAISS and a RAG pipeline."""
@@ -29,7 +29,6 @@ class MuskTwinV2:
         self.client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
         self.embeddings = OpenAIEmbeddings(model="text-embedding-3-small")
         
-        # Check if the FAISS index needs to be created
         if not os.path.exists(DB_DIR):
             print("   No existing FAISS index found. Building a new one from the corpus...")
             self._create_and_persist_db()
@@ -61,9 +60,7 @@ class MuskTwinV2:
         print(f"   Splitting documents into {len(splits)} chunks.")
         print("   Creating FAISS index... This may take a few moments.")
         
-        # Create the FAISS index from the documents
         db = FAISS.from_documents(splits, self.embeddings)
-        # Save the index to disk
         db.save_local(DB_DIR)
         print("   ✅ FAISS index created and persisted.")
 
