@@ -2,13 +2,6 @@ import streamlit as st
 from ai_core_v2 import MuskTwinV2
 import io
 
-# --- FIX for Streamlit Deployment ---
-# This must be at the very top of the main app file
-__import__('pysqlite3')
-import sys
-sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
-# --- END OF FIX ---
-
 # --- Page Configuration ---
 st.set_page_config(
     page_title="Elon Musk Digital Twin",

@@ -44,7 +44,7 @@ class MuskTwinV2:
         file_paths = [os.path.join(CORPUS_DIR, f) for f in os.listdir(CORPUS_DIR) if f.endswith('.txt')]
         
         if not file_paths:
-            raise ValueError("Corpus directory is empty. Run data_collector_v2.py first.")
+            raise ValueError("Corpus directory is empty. Please create data files first.")
 
         print(f"   Found {len(file_paths)} document(s) in corpus.")
         for file_path in file_paths:
@@ -109,21 +109,19 @@ class MuskTwinV2:
             print(f"🔴 Error generating audio: {e}")
             return None
 
-    def ask(self, question: str, chat_history: list = None) -> dict:
+    def ask(self, question: str) -> dict:
         """Asks a question to the digital twin and generates audio for the answer."""
         if not question:
-            return {"answer": "Please ask a question.", "sources": [], "context_chunks": [], "audio": None}
+            return {"answer": "Please ask a question.", "sources": [], "audio": None}
 
         retrieved_docs = self.retriever.get_relevant_documents(question)
         sources = list(set([os.path.basename(doc.metadata.get("source", "")) for doc in retrieved_docs]))
-        context_chunks = [doc.page_content for doc in retrieved_docs]
         
         answer = self.chain.invoke(question)
         
-        # This now returns raw bytes, which is correct for our final app
         audio_content = self.generate_audio(answer)
         
-        return {"answer": answer, "sources": sources, "context_chunks": context_chunks, "audio": audio_content}
+        return {"answer": answer, "sources": sources, "audio": audio_content}
 
 if __name__ == "__main__":
     print("--- Running AI Core Setup with ChromaDB ---")
