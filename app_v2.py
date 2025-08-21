@@ -1,7 +1,6 @@
 import streamlit as st
 from ai_core_v2 import MuskTwinV2
 import io
-import base64
 
 # --- Page Configuration ---
 st.set_page_config(
@@ -32,9 +31,8 @@ try:
         with st.chat_message(message["role"]):
             st.markdown(message["content"])
             if "audio" in message and message["audio"]:
-                # Decode the base64 string back to bytes for playback
-                audio_bytes = base64.b64decode(message["audio"])
-                st.audio(io.BytesIO(audio_bytes), format="audio/mp3")
+                # Using the standard st.audio component with the BytesIO wrapper for mobile
+                st.audio(io.BytesIO(message["audio"]), format="audio/mp3")
             if "sources" in message and message["sources"]:
                 st.info(f"Sources: {', '.join(message['sources'])}")
 
@@ -55,9 +53,8 @@ try:
                 st.markdown(answer)
                 
                 if audio:
-                    # Decode the base64 string back to bytes for playback
-                    audio_bytes = base64.b64decode(audio)
-                    st.audio(io.BytesIO(audio_bytes), format="audio/mp3")
+                    # Using the standard st.audio component with the BytesIO wrapper for mobile
+                    st.audio(io.BytesIO(audio), format="audio/mp3")
                 
                 if sources:
                     st.info(f"Sources: {', '.join(sources)}")
