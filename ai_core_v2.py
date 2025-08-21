@@ -93,3 +93,8 @@ class MuskTwinV2:
         answer = self.chain.invoke(question)
         
         return {"answer": answer, "sources": sources}
+
+if __name__ == "__main__":
+    print("--- Running AI Core Setup with ChromaDB ---")
+    twin = MuskTwinV2()
+    print("\n--- AI Core Setup Complete ---")
