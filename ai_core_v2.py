@@ -1,6 +1,5 @@
 import os
 from dotenv import load_dotenv
-from openai import OpenAI
 from langchain_openai import ChatOpenAI, OpenAIEmbeddings
 from langchain.prompts import ChatPromptTemplate
 from langchain_community.vectorstores import Chroma
@@ -23,7 +22,6 @@ class MuskTwinV2:
     
     def __init__(self):
         """Initializes the RAG pipeline, building the ChromaDB store if it doesn't exist."""
-        self.client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
         self.embeddings = OpenAIEmbeddings(model="text-embedding-3-small")
         
         if not os.path.exists(DB_DIR):
@@ -83,30 +81,15 @@ class MuskTwinV2:
         )
         
         self.retriever = retriever
-        
-    def generate_audio(self, text: str) -> bytes:
-        """Generates audio from text using OpenAI's TTS API."""
-        try:
-            response = self.client.audio.speech.create(
-                model="tts-1",
-                voice="onyx",
-                input=text
-            )
-            return response.content
-        except Exception as e:
-            print(f"🔴 Error generating audio: {e}")
-            return None
 
     def ask(self, question: str) -> dict:
-        """Asks a question to the digital twin and generates audio for the answer."""
+        """Asks a question to the digital twin."""
         if not question:
-            return {"answer": "Please ask a question.", "sources": [], "audio": None}
+            return {"answer": "Please ask a question.", "sources": []}
 
         retrieved_docs = self.retriever.get_relevant_documents(question)
         sources = list(set([os.path.basename(doc.metadata.get("source", "")) for doc in retrieved_docs]))
         
         answer = self.chain.invoke(question)
         
-        audio_content = self.generate_audio(answer)
-        
-        return {"answer": answer, "sources": sources, "audio": audio_content}
+        return {"answer": answer, "sources": sources}
