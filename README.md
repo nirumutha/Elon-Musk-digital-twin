@@ -63,6 +63,8 @@ Add your OpenAI API key: OPENAI_API_KEY="sk-..."
 
 Run the application:
 
+![Project Banner]([https://link-to-your-image.com/image.png](http://xpert.digital/wp-content/uploads/2025/02/explainable-ai-Xpert.Digital-169-png.png))
+
 First, build the knowledge base: python data_collector_v2.py
 
 Then, build the vector database: python ai_core_v2.py
