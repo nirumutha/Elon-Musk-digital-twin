@@ -39,8 +39,8 @@ Core Language: Python
 ⚙️ Setup and Installation
 Clone the repository:
 
-git clone [Your-Repo-URL]
-cd digital-twin-final
+git clone https://github.com/nirumutha/Elon-Musk-digital-twin.git
+cd Elon-Musk-digital-twin
 
 Create and activate a virtual environment:
 
