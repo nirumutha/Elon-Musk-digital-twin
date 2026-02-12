@@ -2,6 +2,7 @@ streamlit
 langchain
 langchain-openai
 langchain-community
+langchain-core
 chromadb
 pydub
 python-dotenv
