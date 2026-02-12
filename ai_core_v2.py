@@ -3,7 +3,7 @@ import re
 from dotenv import load_dotenv
 from openai import OpenAI
 from langchain_openai import ChatOpenAI, OpenAIEmbeddings
-from langchain.prompts import ChatPromptTemplate
+from langchain_core.prompts import ChatPromptTemplate
 from langchain_community.vectorstores import FAISS
 from langchain_community.document_loaders import TextLoader
 from langchain.text_splitter import RecursiveCharacterTextSplitter
